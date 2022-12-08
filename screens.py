@@ -6,6 +6,11 @@ HEIGHT = 600
 WHITE = (255, 255, 255)
 YELLOW = (255, 255, 0)
 GREEN = (0, 128, 94)
+ORANGE = (255, 172, 28)
+RED = (255, 0, 0)
+FPS = 280
+FIRST_NOTICE = 10000
+SECOND_NOTICE = 5000
 
 class Game:
     def __init__(self):
@@ -17,19 +22,20 @@ class Game:
         self.racket1 = Racket(10, HEIGHT//2, vy = 5)
         self.racket2 = Racket(WIDTH - 10, HEIGHT//2, vy = 5)
         self.font = pg.font.Font("fonts/ZenDots.ttf", 15)
+        self.timerFont = pg.font.Font("fonts/ZenDots.ttf", 20)
         self.scoreboard1 = 0
         self.scoreboard2 = 0
         self.whogoals = ""
-        self.timer = 5000 #En milisegundos
+        self.timer = 15000 #En milisegundos
 
     def frame_loop(self):
         
         game_over = False
 
-        while not game_over or self.scoreboard1 < 3 or self.scoreboard2 < 3 : #Mientras el marcador sea menor a 3 el juego sigue
-            #imprimir los milisegundos que tarda cada fot ograma actualmente
-            time_jump = self.refresh_rate.tick(280) #variable para controlar la velocidad entre fotogramas // 1000/280 = cantidad de fotogramas por segundo
-            self.timer -= time_jump
+        while not game_over and (self.scoreboard1 < 10 or self.scoreboard2 < 10) and self.timer > 0: #Mientras el marcador sea menor a 10 el juego sigue. Además el temporizador debe ser mayor a cero
+            
+            time_jump = self.refresh_rate.tick(FPS) #variable para controlar la velocidad entre fotogramas // 1000/280 = cantidad de fotogramas por segundo
+            self.timer -= time_jump 
 
             if self.timer == 0: #Si el temporizador llega a 0, Game Over.
                 game_over = True
@@ -42,22 +48,27 @@ class Game:
             self.racket2.move(pg.K_UP, pg.K_DOWN) #Mover raqueta derecha
             self.whogoals = self.ball.move() #Mover pelota
 
+            if self.timer > FIRST_NOTICE: #Si es menor a 10000 milisegundos, pintar pantalla en naranja
+                self.main_screen.fill(GREEN)
+            elif self.timer > SECOND_NOTICE:
+                self.main_screen.fill(ORANGE)
+            else:
+                self.main_screen.fill(RED)
+
             if self.whogoals == "right":
                 self.scoreboard1 += 1
             elif self.whogoals == "left":
                 self.scoreboard2 += 1
-
-            self.main_screen.fill(GREEN) #Pintar la pantalla
+            
+            #self.main_screen.fill(GREEN) #Pintar la pantalla // Desactivo para que no pinte después del if self.timer 
             self.ball.crash_check(self.racket1,self.racket2) #Lógica de choque
-            #self.ball.scoreboard(self.main_screen) #Establecer el marcador, hay que ponerlo después de pantalla, para que no se sobrepongan.
 
-            """
-            for i in range(1, 100):
-                if i == 99:
-                    game_over = True 
-            """
             self.scoreboard()
             self.dashed_line()
+
+            time = self.font.render(str(int(self.timer/1000)), 0, WHITE) #Le añadimos int para que muestre solamente los segundos como unidades, str para que lo convierta a string
+            self.main_screen.blit(time, (410, 20))
+            #self.ball.scoreboard(self.main_screen) #Establecer el marcador, hay que ponerlo después de pantalla, para que no se sobrepongan.
 
             self.ball.draw(self.main_screen) #Pintar la pelota
             self.racket1.draw(self.main_screen) #Pintar la raqueta 1
