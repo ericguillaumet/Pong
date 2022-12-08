@@ -33,6 +33,8 @@ class Ball:
 
             self.vx *= -1
             self.vy *= -1
+
+            return "right"
             
         if self.pos_x < 0 - self.radius * 10: #límite izquierdo
             self.counter_left += 1
@@ -42,6 +44,8 @@ class Ball:
 
             self.vx *= -1
             self.vy *= -1
+
+            return "left"
 
     def scoreboard(self, main_screen):
         SCLeft = self.font.render(str(self.counter_right), 0, (255, 255, 0))
@@ -94,6 +98,8 @@ class Racket():
         if key_status[key_down] == True and self.pos_y < (y_max - self.h // 2):
             self.pos_y += 5
 
+    #Para poder llamar la función como una variable
+    
     @property
     def right(self):
         return self.pos_x + self.w//2
