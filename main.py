@@ -1,7 +1,9 @@
-from screens import Game #importamos la clase
+from screens import Game, Menu #importamos las clases
 
 game = Game() #Creamos el objeto de la clase Partida
 
-game.frame_loop()
+menu = Menu()
+mensaje = menu.screen_loop()
 
-#Revisar Font
+if mensaje == "Play":
+    game.frame_loop()

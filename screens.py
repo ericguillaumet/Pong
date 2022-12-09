@@ -13,6 +13,8 @@ FIRST_NOTICE = 10000
 SECOND_NOTICE = 5000
 
 class Game:
+
+
     def __init__(self):
         pg.init()
         self.main_screen = pg.display.set_mode((WIDTH, HEIGHT))
@@ -21,7 +23,7 @@ class Game:
         self.ball = Ball(WIDTH//2, HEIGHT//2, vx = 2, vy = 2)
         self.racket1 = Racket(10, HEIGHT//2, vy = 5)
         self.racket2 = Racket(WIDTH - 10, HEIGHT//2, vy = 5)
-        self.font = pg.font.Font("fonts/ZenDots.ttf", 15)
+        self.font = pg.font.Font("fonts/ZenDots.ttf", 15) #Elijo el directorio donde está la imágen
         self.timerFont = pg.font.Font("fonts/ZenDots.ttf", 20)
         self.scoreboard1 = 0
         self.scoreboard2 = 0
@@ -124,3 +126,32 @@ class Game:
             pg.draw.line(self.main_screen, WHITE, (400, line_count1), (400, line_count2), width = 10) #Pintar linía blanca
             line_count1 += 70
             line_count2 += 70
+
+class Menu:
+    def __init__(self):
+        pg.init()
+        self.main_screen = pg.display.set_mode((WIDTH, HEIGHT))
+        pg.display.set_caption("Menu")
+        self.refresh_rate = pg.time.Clock()
+
+        self.background_image = pg.image.load("images/portada.jpg") #Elijo el directorio donde está la imágen
+        self.font_menu = pg.font.Font("fonts/ZenDots.ttf", 20)
+
+    def screen_loop(self):
+        game_over = False
+
+        while not game_over:
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    game_over = True
+
+            if event.type == pg.KEYDOWN: #KEYDOWN para llamar a cualquier tecla del teclado
+                if event.key == pg.K_RETURN: #key llama los distintos eventos de teclado
+                    game_over = True
+                    return "Play"
+
+            self.main_screen.blit(self.background_image, (0, 0))
+            menu = self.font_menu.render("Press RETURN to start", 0, WHITE)
+            self.main_screen.blit(menu, (WIDTH // 2, 450))
+            pg.display.flip()
+

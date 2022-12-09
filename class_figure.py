@@ -52,7 +52,7 @@ class Ball:
         SCRight = self.font.render(str(self.counter_left), 0, (255, 255, 0))
         main_screen.blit(SCRight, (200, 50))
         main_screen.blit(SCLeft, (600, 50))
-    
+     
     @property #Para transformar los métodos cómo variables
     def right(self):
         return self.pos_x + self.radius
@@ -99,7 +99,7 @@ class Racket():
             self.pos_y += 5
 
     #Para poder llamar la función como una variable
-    
+
     @property
     def right(self):
         return self.pos_x + self.w//2
