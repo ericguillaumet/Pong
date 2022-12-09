@@ -27,6 +27,8 @@ class Game:
         self.scoreboard2 = 0
         self.whogoals = ""
         self.timer = 15000 #En milisegundos
+        self.background_color = GREEN
+        self.frame_count = 0
 
     def frame_loop(self):
         
@@ -47,13 +49,8 @@ class Game:
             self.racket1.move(pg.K_w, pg.K_s) #Mover raqueta izquierda
             self.racket2.move(pg.K_UP, pg.K_DOWN) #Mover raqueta derecha
             self.whogoals = self.ball.move() #Mover pelota
-
-            if self.timer > FIRST_NOTICE: #Si es menor a 10000 milisegundos, pintar pantalla en naranja
-                self.main_screen.fill(GREEN)
-            elif self.timer > SECOND_NOTICE:
-                self.main_screen.fill(ORANGE)
-            else:
-                self.main_screen.fill(RED)
+            
+            self.main_screen.fill(self.background())
 
             if self.whogoals == "right":
                 self.scoreboard1 += 1
@@ -91,6 +88,32 @@ class Game:
         SCRight = self.font.render(str(self.scoreboard1), 0, (YELLOW))
         self.main_screen.blit(SCRight, (200, 50))
         self.main_screen.blit(SCLeft, (600, 50))
+
+    def background(self): #fijar fondo de pantalla
+        
+        self.frame_count += 1
+        
+        if self.timer > FIRST_NOTICE: #Aún no entra ninguna condición
+            self.frame_count = 0
+
+        elif self.timer > SECOND_NOTICE: #Si es menor a 10000 milisegundos, pintar pantalla en naranja parpadenado
+
+            if self.frame_count == 20: #Velocidad de parpadeo
+                if self.background_color == GREEN:
+                    self.background_color = ORANGE 
+                else:
+                    self.background_color = GREEN
+                self.frame_count = 0
+
+        else: #Si no cumple ninguna de las otras dos condiciones, 5 segundos, entra en el parpadeo en rojo
+            if self.frame_count == 20:
+                if self.background_color == ORANGE:
+                    self.background_color = RED 
+                else:
+                    self.background_color = ORANGE
+                self.frame_count = 0
+
+        return self.background_color
 
     def dashed_line(self):
         line_count1 = 0
