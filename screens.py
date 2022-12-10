@@ -14,7 +14,6 @@ SECOND_NOTICE = 5000
 
 class Game:
 
-
     def __init__(self):
         pg.init()
         self.main_screen = pg.display.set_mode((WIDTH, HEIGHT))
@@ -76,7 +75,9 @@ class Game:
             self.player_name()
 
             pg.display.flip() #Para activar los colores
-    
+
+        return self.final_result()
+
         pg.quit()
 
     def player_name(self):
@@ -127,6 +128,14 @@ class Game:
             line_count1 += 70
             line_count2 += 70
 
+    def final_result(self):
+        if self.scoreboard1 > self.scoreboard2:
+            return f"Player two wins. Result: Player 1: {self.scoreboard2} Player 2: {self.scoreboard1}"
+        elif self.scoreboard2 > self.scoreboard1:
+            return f"Player one wins. Result: Player 1: {self.scoreboard2} Player 2: {self.scoreboard1}"
+        else:
+            return f"You ended in a tie. Result: Player 1: {self.scoreboard2} Player 2: {self.scoreboard1}"
+
 class Menu:
     def __init__(self):
         pg.init()
@@ -155,3 +164,32 @@ class Menu:
             self.main_screen.blit(menu, (WIDTH // 2, 450))
             pg.display.flip()
 
+class Result:
+    def __init__(self, result):
+        pg.init()
+        self.main_screen = pg.display.set_mode((WIDTH, HEIGHT))
+        pg.display.set_caption("Result")
+        self.refresh_rate = pg.time.Clock()
+
+        self.background_image = pg.image.load("images/portada.jpg") #Elijo el directorio donde está la imágen
+        self.font_result = pg.font.Font("fonts/ZenDots.ttf", 15)
+        self.result = result
+
+    def screen_loop(self):
+        game_over = False
+
+        while not game_over:
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    game_over = True
+
+            if event.type == pg.KEYDOWN: #KEYDOWN para llamar a cualquier tecla del teclado
+                if event.key == pg.K_RETURN: #key llama los distintos eventos de teclado
+                    game_over = True
+                    return "Play"
+
+            #self.main_screen.blit(self.background_image, (0, 0))
+            self.main_screen.fill(WHITE)
+            result = self.font_result.render(self.result, 0, YELLOW)
+            self.main_screen.blit(result, (145, 450))
+            pg.display.flip() 
