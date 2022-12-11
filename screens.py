@@ -176,10 +176,10 @@ class Result:
                 if event.type == pg.QUIT:
                     game_over = True
 
-            if event.type == pg.KEYDOWN: #KEYDOWN para llamar a cualquier tecla del teclado
-                if event.key == pg.K_RETURN: #key llama los distintos eventos de teclado
-                    game_over = True
-                    return "Play"
+                if event.type == pg.KEYDOWN: #KEYDOWN para llamar a cualquier tecla del teclado
+                    if event.key == pg.K_RETURN: #key llama los distintos eventos de teclado
+                        game_over = True
+                        return "Play"
 
             #self.main_screen.blit(self.background_image, (0, 0))
             self.main_screen.fill(WHITE)
@@ -192,14 +192,13 @@ class Result:
 
 class Records:
 
-    def __init__(self, result):
+    def __init__(self):
             self.main_screen = pg.display.set_mode((WIDTH, HEIGHT))
             pg.display.set_caption("Records")
             self.refresh_rate = pg.time.Clock()
 
             self.background_image = pg.image.load("images/portada.jpg") #Elijo el directorio donde está la imágen
             self.font_result = pg.font.Font("fonts/ZenDots.ttf", 15)
-            self.result = result
 
     def screen_loop(self):
         game_over = False
