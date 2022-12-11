@@ -19,11 +19,16 @@ class Game:
         self.timer = TIME_LIMIT #En milisegundos
         self.background_color = GREEN
         self.frame_count = 0
+        self.sound = pg.mixer.Sound("audio/pelota.mp3")
 
     def frame_loop(self):
-        
-        game_over = False
+        self.timer = TIME_LIMIT #reiniciar parámetros
+        self.scoreboard1 = 0
+        self.scoreboard2 = 0
+        self.refresh_rate.tick()
 
+        game_over = False
+        
         while not game_over and (self.scoreboard1 < 10 or self.scoreboard2 < 10) and self.timer > 0: #Mientras el marcador sea menor a 10 el juego sigue. Además el temporizador debe ser mayor a cero
             
             time_jump = self.refresh_rate.tick(FPS) #variable para controlar la velocidad entre fotogramas // 1000/280 = cantidad de fotogramas por segundo
@@ -34,7 +39,8 @@ class Game:
         
             for event in pg.event.get():
                 if event.type == pg.QUIT:
-                    game_over = True
+                    #game_over = True
+                    return True
             
             self.racket1.move(pg.K_w, pg.K_s) #Mover raqueta izquierda
             self.racket2.move(pg.K_UP, pg.K_DOWN) #Mover raqueta derecha
@@ -49,6 +55,8 @@ class Game:
             
             #self.main_screen.fill(GREEN) #Pintar la pantalla // Desactivo para que no pinte después del if self.timer 
             self.ball.crash_check(self.racket1,self.racket2) #Lógica de choque
+            self.sound.play()
+            #self.sound.stop()
 
             self.scoreboard()
             self.dashed_line()
@@ -66,9 +74,7 @@ class Game:
             pg.display.flip() #Para activar los colores
 
         return self.final_result()
-
-        
-
+  
     def player_name(self):
         player1 = self.font.render("Player 1", 0, YELLOW)
         player2 = self.font.render("Player 2", 0, YELLOW)
@@ -83,9 +89,12 @@ class Game:
 
     def background(self): #fijar fondo de pantalla
         
+        self.background_color = GREEN
+
         self.frame_count += 1
         
         if self.timer > FIRST_NOTICE: #Aún no entra ninguna condición
+            self.background_color = GREEN
             self.frame_count = 0
 
         elif self.timer > SECOND_NOTICE: #Si es menor a 10000 milisegundos, pintar pantalla en naranja parpadenado
@@ -106,7 +115,7 @@ class Game:
                 self.frame_count = 0
 
         return self.background_color
-
+ 
     def dashed_line(self):
         line_count1 = 0
         line_count2 = 50
@@ -134,13 +143,19 @@ class Menu:
         self.background_image = pg.image.load("images/portada.jpg") #Elijo el directorio donde está la imágen
         self.font_menu = pg.font.Font("fonts/ZenDots.ttf", 20)
 
+        self.music = pg.mixer.Sound("audio/inicio.mp3")
+
     def screen_loop(self):
+
+        self.music.play()
+        
         game_over = False
 
         while not game_over:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
-                    game_over = True
+                    #game_over = True
+                    return True
 
                 if event.type == pg.KEYDOWN: #KEYDOWN para llamar a cualquier tecla del teclado
                     if event.key == pg.K_RETURN: #key llama los distintos eventos de teclado
@@ -148,14 +163,15 @@ class Menu:
 
                     elif event.key == pg.K_r: #key llama los distintos eventos de teclado
                         game_over = True
-                    
 
             self.main_screen.blit(self.background_image, (0, 0))
             play = self.font_menu.render("Press RETURN to start", 0, WHITE)
             record = self.font_menu.render("Press R to check records", 0, WHITE)
             self.main_screen.blit(play, (WIDTH // 2, 450))
             self.main_screen.blit(record, (WIDTH // 2, 400))
+
             pg.display.flip()
+        self.music.stop()
 
 class Result:
 
@@ -174,12 +190,11 @@ class Result:
         while not game_over:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
-                    game_over = True
-
+                    return True
+                    
                 if event.type == pg.KEYDOWN: #KEYDOWN para llamar a cualquier tecla del teclado
                     if event.key == pg.K_RETURN: #key llama los distintos eventos de teclado
                         game_over = True
-                        return "Play"
 
             #self.main_screen.blit(self.background_image, (0, 0))
             self.main_screen.fill(WHITE)
@@ -206,7 +221,7 @@ class Records:
         while not game_over:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
-                    game_over = True
+                    return True
 
             if event.type == pg.KEYDOWN: #KEYDOWN para llamar a cualquier tecla del teclado
                 if event.key == pg.K_RETURN: #key llama los distintos eventos de teclado
@@ -215,4 +230,4 @@ class Records:
             self.main_screen.fill(WHITE)
             result = self.font_result.render("RECORDS", 0, YELLOW)
             self.main_screen.blit(result, (145, 450))
-            pg.display.flip() 
+            pg.display.flip()

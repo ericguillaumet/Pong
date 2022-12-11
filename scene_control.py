@@ -8,9 +8,22 @@ class SceneControl:
         self.records = Records()
 
         self.result_value = ""
+        #como tarea: mejorar el while dentro del método start
 
     def start(self):
-        self.menu.screen_loop()
-        self.result_value = self.game.frame_loop()
-        self.results.get_result(self.result_value)
-        self.results.screen_loop()
+        keep_going = True
+
+        while keep_going:
+            close = self.menu.screen_loop()
+            if close == True:
+                break
+
+            close = self.result_value = self.game.frame_loop()
+            if close == True:
+                break
+
+            self.results.get_result(self.result_value)
+            
+            close = self.results.screen_loop()
+            if close == True:
+                break
