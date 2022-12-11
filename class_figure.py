@@ -1,8 +1,9 @@
 import pygame as pg
+from utilites import WHITE, YELLOW
 
 class Ball:
 
-    def __init__(self, pos_x, pos_y, radius = 20, color = (255, 255, 255), vx = 1, vy = 1):
+    def __init__(self, pos_x, pos_y, radius = 20, color = WHITE, vx = 1, vy = 1):
         self.pos_x = pos_x
         self.pos_y = pos_y
         self.radius = radius
@@ -48,8 +49,8 @@ class Ball:
             return "left"
 
     def scoreboard(self, main_screen):
-        SCLeft = self.font.render(str(self.counter_right), 0, (255, 255, 0))
-        SCRight = self.font.render(str(self.counter_left), 0, (255, 255, 0))
+        SCLeft = self.font.render(str(self.counter_right), 0, (YELLOW))
+        SCRight = self.font.render(str(self.counter_left), 0, (YELLOW))
         main_screen.blit(SCRight, (200, 50))
         main_screen.blit(SCLeft, (600, 50))
      
@@ -75,9 +76,9 @@ class Ball:
                     self.vx *= -1
                     break
 
-class Racket():
+class Racket: 
     
-    def __init__(self, pos_x, pos_y, w = 20, h = 100, color = (255, 255, 255), vx = 1, vy = 1):
+    def __init__(self, pos_x, pos_y, w = 20, h = 100, color = WHITE, vx = 1, vy = 1):
         self.pos_x = pos_x
         self.pos_y = pos_y
         self.w = w

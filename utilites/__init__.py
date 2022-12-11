@@ -1,0 +1,17 @@
+import pygame as pg
+
+pg.init()
+
+WIDTH = 800
+HEIGHT = 600
+
+WHITE = (255, 255, 255)
+YELLOW = (255, 255, 0)
+GREEN = (0, 128, 94)
+ORANGE = (255, 172, 28)
+RED = (255, 0, 0)
+
+FPS = 280
+FIRST_NOTICE = 10000
+SECOND_NOTICE = 5000
+TIME_LIMIT = 15000
