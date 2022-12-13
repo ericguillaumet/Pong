@@ -4,13 +4,12 @@ from utilites import *
 
 class Game:
 
-    def __init__(self):
-        self.main_screen = pg.display.set_mode((WIDTH, HEIGHT))
-        pg.display.set_caption("Pong")
-        self.refresh_rate = pg.time.Clock()
-        self.ball = Ball(WIDTH//2, HEIGHT//2, vx = 2, vy = 2)
+    def __init__(self, screen, refresh):
+        self.main_screen = screen
+        self.refresh_rate = refresh
+        self.ball = Ball(WIDTH//2, HEIGHT//2, vx = 6, vy = 6) #vx y vy para controlar velocidad de la pelota
         self.racket1 = Racket(10, HEIGHT//2, vy = 5)
-        self.racket2 = Racket(WIDTH - 10, HEIGHT//2, vy = 5)
+        self.racket2 = Racket(WIDTH - 20, HEIGHT//2, vy = 5)
         self.font = pg.font.Font("fonts/ZenDots.ttf", 15) #Elijo el directorio donde está la imágen
         self.timerFont = pg.font.Font("fonts/ZenDots.ttf", 20)
         self.scoreboard1 = 0
@@ -21,7 +20,7 @@ class Game:
         self.frame_count = 0
         self.sound = pg.mixer.Sound("audio/pelota.mp3")
 
-    def frame_loop(self):
+    def screen_loop(self):
         self.timer = TIME_LIMIT #reiniciar parámetros
         self.scoreboard1 = 0
         self.scoreboard2 = 0
@@ -47,15 +46,11 @@ class Game:
             self.whogoals = self.ball.move() #Mover pelota
             
             self.main_screen.fill(self.background())
-
-            if self.whogoals == "right":
-                self.scoreboard1 += 1
-            elif self.whogoals == "left":
-                self.scoreboard2 += 1
             
             #self.main_screen.fill(GREEN) #Pintar la pantalla // Desactivo para que no pinte después del if self.timer 
             self.ball.crash_check(self.racket1,self.racket2) #Lógica de choque
-            self.sound.play()
+            self.sound.stop()
+            #self.sound.play()
             #self.sound.stop()
 
             self.scoreboard()
@@ -82,6 +77,11 @@ class Game:
         self.main_screen.blit(player2, (560, 30))
 
     def scoreboard(self):
+        if self.whogoals == "right":
+            self.scoreboard1 += 1
+        elif self.whogoals == "left":
+            self.scoreboard2 += 1
+
         SCLeft = self.font.render(str(self.scoreboard2), 0, (YELLOW))
         SCRight = self.font.render(str(self.scoreboard1), 0, (YELLOW))
         self.main_screen.blit(SCRight, (200, 50))
@@ -89,7 +89,7 @@ class Game:
 
     def background(self): #fijar fondo de pantalla
         
-        self.background_color = GREEN
+        self.timer
 
         self.frame_count += 1
         
@@ -99,7 +99,7 @@ class Game:
 
         elif self.timer > SECOND_NOTICE: #Si es menor a 10000 milisegundos, pintar pantalla en naranja parpadenado
 
-            if self.frame_count == 20: #Velocidad de parpadeo
+            if self.frame_count == 30: #Velocidad de parpadeo
                 if self.background_color == GREEN:
                     self.background_color = ORANGE 
                 else:
@@ -107,11 +107,11 @@ class Game:
                 self.frame_count = 0
 
         else: #Si no cumple ninguna de las otras dos condiciones, 5 segundos, entra en el parpadeo en rojo
-            if self.frame_count == 20:
-                if self.background_color == ORANGE:
+            if self.frame_count == 30:
+                if self.background_color == GREEN:
                     self.background_color = RED 
                 else:
-                    self.background_color = ORANGE
+                    self.background_color = GREEN
                 self.frame_count = 0
 
         return self.background_color
@@ -135,10 +135,9 @@ class Game:
             return f"You ended in a tie. Result: Player 1: {self.scoreboard2} Player 2: {self.scoreboard1}"
 
 class Menu:
-    def __init__(self):
-        self.main_screen = pg.display.set_mode((WIDTH, HEIGHT))
-        pg.display.set_caption("Menu")
-        self.refresh_rate = pg.time.Clock()
+    def __init__(self, screen, refresh):
+        self.main_screen = screen
+        self.refresh_rate = refresh
 
         self.background_image = pg.image.load("images/portada.jpg") #Elijo el directorio donde está la imágen
         self.font_menu = pg.font.Font("fonts/ZenDots.ttf", 20)
@@ -175,14 +174,14 @@ class Menu:
 
 class Result:
 
-    def __init__(self):
-        self.main_screen = pg.display.set_mode((WIDTH, HEIGHT))
-        pg.display.set_caption("Result")
-        self.refresh_rate = pg.time.Clock()
+    def __init__(self, screen, refresh):
+        self.main_screen = screen
+        self.refresh_rate = refresh
 
         self.background_image = pg.image.load("images/portada.jpg") #Elijo el directorio donde está la imágen
         self.font_result = pg.font.Font("fonts/ZenDots.ttf", 15)
         self.result = ""
+        
 
     def screen_loop(self):
         game_over = False
@@ -207,13 +206,12 @@ class Result:
 
 class Records:
 
-    def __init__(self):
-            self.main_screen = pg.display.set_mode((WIDTH, HEIGHT))
-            pg.display.set_caption("Records")
-            self.refresh_rate = pg.time.Clock()
+    def __init__(self, screen, refresh):
+        self.main_screen = screen
+        self.refresh_rate = refresh
 
-            self.background_image = pg.image.load("images/portada.jpg") #Elijo el directorio donde está la imágen
-            self.font_result = pg.font.Font("fonts/ZenDots.ttf", 15)
+        self.background_image = pg.image.load("images/portada.jpg") #Elijo el directorio donde está la imágen
+        self.font_result = pg.font.Font("fonts/ZenDots.ttf", 15)
 
     def screen_loop(self):
         game_over = False

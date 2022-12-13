@@ -13,6 +13,7 @@ class Ball:
         self.counter_left = 0
         self.counter_right = 0
         self.font = pg.font.Font(None, 40) #Esto esta fuera del while
+        self.sound = pg.mixer.Sound("audio/pelota.mp3")
 
     def draw(self, screen):
         pg.draw.circle(screen, self.color,(self.pos_x, self.pos_y), self.radius)
@@ -73,12 +74,13 @@ class Ball:
                 self.left <= r.right and\
                 self.down >= r.up and\
                 self.up <= r.down:
+                    self.sound.play()
                     self.vx *= -1
                     break
 
 class Racket: 
     
-    def __init__(self, pos_x, pos_y, w = 20, h = 100, color = WHITE, vx = 1, vy = 1):
+    def __init__(self, pos_x, pos_y, w = 20, h = 120, color = WHITE, vx = 1, vy = 1):
         self.pos_x = pos_x
         self.pos_y = pos_y
         self.w = w
@@ -86,9 +88,31 @@ class Racket:
         self.color = color
         self.vx = vx
         self.vy = vy
+        self.file_images = {
+            'left' : ['electric00_izqda.png','electric01_izqda.png','electric02_izqda.png'],
+            'right' : ['electric00_drcha.png','electric01_drcha.png','electric02_drcha.png']
+            }
+                                
+        self.racket = pg.image.load("images/rackets/electric00_izqda.png") #Cargar la imágen
 
+        self.imagenes = self.load_images() #llamo al metodo que me devuelve la inicializacion de imagenes
+        self._direction = '' #variable para asignar direccion
+        self.active_image = 0 #variable para indicar repeticion
+ 
+    def load_images(self):
+        test_image = {}
+        for side in self.file_images:
+            test_image[side] = []
+
+            for directory_name in self.file_images[side]:
+                images = pg.image.load(f"images/raquetas/{directory_name}")
+                test_image[side].append(images)
+        
+        return test_image
+       
     def draw(self, screen):
         pg.draw.rect(screen, self.color,(self.pos_x - (self.w // 2),self.pos_y - (self.h // 2), self.w, self.h))
+        screen.blit(self.racket, (self.pos_x - (self.w // 2),self.pos_y - (self.h // 2), self.w, self.h))
 
     def move(self, key_up, key_down, y_max = 600, y_min = 0):
         key_status = pg.key.get_pressed()
