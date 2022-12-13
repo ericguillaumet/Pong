@@ -7,9 +7,13 @@ class Game:
     def __init__(self, screen, refresh):
         self.main_screen = screen
         self.refresh_rate = refresh
+
         self.ball = Ball(WIDTH//2, HEIGHT//2, vx = 6, vy = 6) #vx y vy para controlar velocidad de la pelota
+
         self.racket1 = Racket(10, HEIGHT//2, vy = 5)
+        self.racket1.direction = "izqda"
         self.racket2 = Racket(WIDTH - 20, HEIGHT//2, vy = 5)
+        self.racket2.direction = "drcha"
         self.font = pg.font.Font("fonts/ZenDots.ttf", 15) #Elijo el directorio donde está la imágen
         self.timerFont = pg.font.Font("fonts/ZenDots.ttf", 20)
         self.scoreboard1 = 0
@@ -159,9 +163,13 @@ class Menu:
                 if event.type == pg.KEYDOWN: #KEYDOWN para llamar a cualquier tecla del teclado
                     if event.key == pg.K_RETURN: #key llama los distintos eventos de teclado
                         game_over = True
+                        self.music.stop()
+                        return "jugar"
 
                     elif event.key == pg.K_r: #key llama los distintos eventos de teclado
+                        self.music.stop()
                         game_over = True
+                        return "records"
 
             self.main_screen.blit(self.background_image, (0, 0))
             play = self.font_menu.render("Press RETURN to start", 0, WHITE)

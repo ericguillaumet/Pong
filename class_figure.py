@@ -95,7 +95,7 @@ class Racket:
                                 
         self.racket = pg.image.load("images/rackets/electric00_izqda.png") #Cargar la imágen
 
-        self.imagenes = self.load_images() #llamo al metodo que me devuelve la inicializacion de imagenes
+        self.images = self.load_images() #llamo al metodo que me devuelve la inicializacion de imagenes
         self._direction = '' #variable para asignar direccion
         self.active_image = 0 #variable para indicar repeticion
  
@@ -109,10 +109,21 @@ class Racket:
                 test_image[side].append(images)
         
         return test_image
+
+    @property
+    def direction(self):
+        return self._direction
+    
+    @direction.setter
+    def direction(self,valor):
+        self._direction= valor
        
     def draw(self, screen):
-        pg.draw.rect(screen, self.color,(self.pos_x - (self.w // 2),self.pos_y - (self.h // 2), self.w, self.h))
-        screen.blit(self.racket, (self.pos_x - (self.w // 2),self.pos_y - (self.h // 2), self.w, self.h))
+        #pg.draw.rect(screen, self.color,(self.pos_x - (self.w // 2),self.pos_y - (self.h // 2), self.w, self.h))
+        screen.blit(self.images[self._direction][self.active_image], (self.pos_x - (self.w // 2),self.pos_y - (self.h // 2), self.w, self.h))
+        self.active_image += 1
+        if self.active_image == 2:
+            self.active_image = 0
 
     def move(self, key_up, key_down, y_max = 600, y_min = 0):
         key_status = pg.key.get_pressed()
