@@ -105,7 +105,7 @@ class Racket:
             test_image[side] = []
 
             for directory_name in self.file_images[side]:
-                images = pg.image.load(f"images/raquetas/{directory_name}")
+                images = pg.image.load(f"images/rackets/{directory_name}")
                 test_image[side].append(images)
         
         return test_image
@@ -122,7 +122,7 @@ class Racket:
         #pg.draw.rect(screen, self.color,(self.pos_x - (self.w // 2),self.pos_y - (self.h // 2), self.w, self.h))
         screen.blit(self.images[self._direction][self.active_image], (self.pos_x - (self.w // 2),self.pos_y - (self.h // 2), self.w, self.h))
         self.active_image += 1
-        if self.active_image == 2:
+        if self.active_image >= len(self.images[self.direction]):
             self.active_image = 0
 
     def move(self, key_up, key_down, y_max = 600, y_min = 0):

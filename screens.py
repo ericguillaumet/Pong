@@ -11,9 +11,9 @@ class Game:
         self.ball = Ball(WIDTH//2, HEIGHT//2, vx = 6, vy = 6) #vx y vy para controlar velocidad de la pelota
 
         self.racket1 = Racket(10, HEIGHT//2, vy = 5)
-        self.racket1.direction = "izqda"
+        self.racket1.direction = 'left'
         self.racket2 = Racket(WIDTH - 20, HEIGHT//2, vy = 5)
-        self.racket2.direction = "drcha"
+        self.racket2.direction = 'right'
         self.font = pg.font.Font("fonts/ZenDots.ttf", 15) #Elijo el directorio donde está la imágen
         self.timerFont = pg.font.Font("fonts/ZenDots.ttf", 20)
         self.scoreboard1 = 0
@@ -173,9 +173,7 @@ class Menu:
 
             self.main_screen.blit(self.background_image, (0, 0))
             play = self.font_menu.render("Press RETURN to start", 0, WHITE)
-            record = self.font_menu.render("Press R to check records", 0, WHITE)
             self.main_screen.blit(play, (WIDTH // 2, 450))
-            self.main_screen.blit(record, (WIDTH // 2, 400))
 
             pg.display.flip()
         self.music.stop()
@@ -205,13 +203,13 @@ class Result:
 
             #self.main_screen.blit(self.background_image, (0, 0))
             self.main_screen.fill(WHITE)
-            result = self.font_result.render(self.result, 0, YELLOW)
+            result = self.font_result.render(self.result, 0, BLACK)
             self.main_screen.blit(result, (145, 450))
             pg.display.flip() 
 
     def get_result(self, result):
         self.result = result
-
+"""
 class Records:
 
     def __init__(self, screen, refresh):
@@ -234,6 +232,7 @@ class Records:
                     game_over = True
                     
             self.main_screen.fill(WHITE)
-            result = self.font_result.render("RECORDS", 0, YELLOW)
+            result = self.font_result.render("RECORDS", 0, BLACK)
             self.main_screen.blit(result, (145, 450))
             pg.display.flip()
+"""
